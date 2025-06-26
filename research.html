@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Sinha | Research</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00FF41;
+            --primary-dark-bg: #061212; 
+            --primary-white: #FFFFFF;
+            --card-border: rgba(0, 255, 65, 0.2);
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark-bg);
+            overflow-x: hidden;
+        }
+
+        /* Fullscreen background video container */
+        #video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 1;
+            transform: translateX(-50%) translateY(-50%);
+            opacity: 0.15;
+        }
+        
+        /* The main content container */
+        #research-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            color: var(--primary-white);
+            padding: 120px 20px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Top navigation bar */
+        .top-nav {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .nav-links a {
+            color: var(--primary-white);
+            margin-left: 35px;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+        
+        /* Page Title */
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Research grid container - for easy future additions */
+        .research-grid {
+            width: 100%;
+            max-width: 900px; /* Define max width for the content area */
+        }
+        
+        /* Card for the research paper */
+        .research-card {
+             width: 100%;
+             height: 75vh; /* A good height for the PDF */
+             border: 1px solid var(--card-border);
+             border-radius: 12px;
+             overflow: hidden; /* Important for keeping the embed within the rounded corners */
+             display: flex;
+             flex-direction: column;
+        }
+
+        .research-embed {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 900px) {
+            .research-card {
+                height: 70vh;
+            }
+        }
+        @media (max-width: 768px) {
+            #research-page {
+                padding-top: 100px;
+                justify-content: flex-start; /* Switch to top align on mobile to ensure title is visible */
+            }
+            .top-nav {
+                top: 20px;
+                right: 0;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .nav-links a {
+                margin: 5px 15px;
+                font-size: 0.9rem;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Fullscreen Background Video -->
+    <video autoplay loop muted playsinline id="video-background">
+        <!-- IMPORTANT: Replace with the actual path to your research.mp4 video -->
+        <source src="./research.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Research Page Section -->
+    <main id="research-page">
+        <nav class="top-nav">
+            <div class="nav-links">
+                <a href="./home.html">About</a>
+                <a href="./projects.html">Projects</a>
+                <a href="./resume.html">Resume</a>
+                <a href="./research.html">Research</a>
+                <a href="./contact.html">Contact</a>
+            </div>
+        </nav>
+
+        <h1 class="page-title">My Research</h1>
+        
+        <div class="research-grid">
+            <div class="research-card">
+                 <!-- 
+                  IMPORTANT: Make sure the 'research1.pdf' file is in the same
+                  folder as this HTML file, or update the path in the src attribute.
+                -->
+                <embed src="./research1.pdf" type="application/pdf" class="research-embed"/>
+            </div>
+             <!-- You can add more <div class="research-card">...</div> here in the future -->
+        </div>
+    </main>
+
+</body>
+</html> 

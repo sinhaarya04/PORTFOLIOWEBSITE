@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Sinha | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00FF41;
+            --neon-red: #FF3131; /* A bright, neon-like red */
+            --primary-black: #000000;
+            --primary-white: #FFFFFF;
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            background-color: var(--primary-black);
+            color: var(--primary-white);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+        }
+
+        /* Matrix background canvas */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Main content container */
+        .main-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* Top-left name/logo */
+        .header-name {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--primary-white);
+            z-index: 3;
+            opacity: 0;
+            animation: slideInFromLeft 1s ease 0.5s forwards;
+        }
+
+        /* The glowing ENTER button */
+        .enter-button {
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 15px 45px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 0 15px var(--neon-green), 
+                        inset 0 0 10px rgba(0, 255, 65, 0.5);
+            text-shadow: 0 0 10px var(--neon-green);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+        }
+
+        .enter-button:hover {
+            background-color: var(--neon-green);
+            color: var(--primary-black);
+            box-shadow: 0 0 30px var(--neon-green), 
+                        0 0 50px var(--neon-green),
+                        inset 0 0 0 rgba(0, 255, 65, 0.5);
+            text-shadow: none;
+            transform: scale(1.05);
+        }
+
+        /* Subtext below the button */
+        .subtext {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
+        }
+
+        /* Page transition overlay */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-black);
+            z-index: 9999;
+            transform: translateX(-100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .page-transition.active {
+            transform: translateX(0);
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Media query for smaller screens */
+        @media (max-width: 768px) {
+            .header-name {
+                top: 20px;
+                left: 20px;
+                font-size: 1rem;
+            }
+            .enter-button {
+                padding: 12px 35px;
+                font-size: 1.2rem;
+            }
+            .subtext {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page transition overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+
+    <!-- The Matrix-style animated background -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Header with name -->
+    <header class="header-name">
+        ARYAN SINHA
+    </header>
+
+    <!-- Centered main content -->
+    <main class="main-container">
+        <button class="enter-button" onclick="navigateToHome()">Enter</button>
+        <p class="subtext">Press ENTER to begin</p>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas to full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Tickers, indices, and characters for the financial data stream effect
+        const greenChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$.+▲';
+        const redChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$.-▼';
+        // Add common tickers to be occasionally inserted for more realism
+        const tickers = ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'NVDA', 'TSLA', 'S&P 500', 'BTC', 'ETH'];
+
+        const fontSize = 16;
+        let columns = Math.floor(canvas.width / fontSize);
+
+        // Create an array of drop objects, one for each column
+        const rainDrops = [];
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = {
+                y: Math.floor(Math.random() * (canvas.height / fontSize)),
+                color: Math.random() > 0.5 ? 'green' : 'red',
+                text: '' // To hold multi-character tickers
+            };
+        }
+
+        // The drawing function for the animation loop
+        const draw = () => {
+            // Set a semi-transparent black background to create the fading trail effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.font = fontSize + 'px monospace';
+
+            // Loop through each drop
+            for (let i = 0; i < rainDrops.length; i++) {
+                const drop = rainDrops[i];
+                
+                // Set the color for the current column
+                ctx.fillStyle = drop.color === 'green' ? '#00FF41' : '#FF3131';
+
+                let text;
+                // If the drop has a multi-character text (a ticker), use it
+                if (drop.text.length > 0) {
+                    text = drop.text.charAt(0);
+                    drop.text = drop.text.substring(1);
+                } else {
+                    // Otherwise, pick a random character from the appropriate set
+                    const charSet = drop.color === 'green' ? greenChars : redChars;
+                    text = charSet.charAt(Math.floor(Math.random() * charSet.length));
+                }
+
+                // Draw the character
+                ctx.fillText(text, i * fontSize, drop.y * fontSize);
+
+                // Reset the drop to the top if it goes off screen
+                if (drop.y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drop.y = 0;
+                    // Randomly assign a new color for the column
+                    drop.color = Math.random() > 0.5 ? 'green' : 'red';
+                    // Give a small chance to display a full ticker
+                    if (Math.random() > 0.95) {
+                        drop.text = tickers[Math.floor(Math.random() * tickers.length)];
+                    }
+                }
+                
+                // Move the drop down
+                drop.y++;
+            }
+        };
+
+        // Start the animation
+        let animationInterval = setInterval(draw, 50); // Slowed down slightly for readability
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            rainDrops.length = 0; // Clear the array
+            for (let x = 0; x < columns; x++) {
+                 rainDrops[x] = {
+                    y: Math.floor(Math.random() * (canvas.height / fontSize)),
+                    color: Math.random() > 0.5 ? 'green' : 'red',
+                    text: ''
+                };
+            }
+        });
+        
+        // Smooth page transition function
+        function navigateToHome() {
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
+            
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 300);
+        }
+        
+        // Add keyboard support for the "Enter" key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const button = document.querySelector('.enter-button');
+                button.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    console.log("Entering website...");
+                    button.style.transform = 'scale(1)';
+                    navigateToHome();
+                }, 150);
+            }
+        });
+
+    </script>
+</body>
+</html> 

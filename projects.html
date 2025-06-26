@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Sinha | Projects</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00FF41;
+            --neon-red: #FF3131; /* Neon red for down-trending style */
+            --primary-dark-bg: #061212; 
+            --primary-white: #FFFFFF;
+            --card-bg: rgba(10, 25, 25, 0.4); /* Slightly more opaque card background */
+            --card-border-green: rgba(0, 255, 65, 0.2);
+            --card-border-red: rgba(255, 49, 49, 0.2);
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark-bg);
+            overflow-x: hidden;
+        }
+
+        /* Fullscreen background video container */
+        #video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 1;
+            transform: translateX(-50%) translateY(-50%);
+            opacity: 0.15;
+        }
+        
+        /* The main content container */
+        #projects-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            color: var(--primary-white);
+            padding: 120px 20px 60px; /* More bottom padding */
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Top navigation bar */
+        .top-nav {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .nav-links a {
+            color: var(--primary-white);
+            margin-left: 35px;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+        
+        /* Page Title */
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Grid container for projects */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Responsive grid */
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Individual project card styling */
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden; /* To keep image corners rounded */
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Allows the content to fill the space */
+        }
+
+        .card-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary-white);
+        }
+
+        .card-content p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+        
+        /* Alternating card styles */
+        .project-card:nth-child(odd) {
+            border: 1px solid var(--card-border-green);
+        }
+        .project-card:nth-child(odd):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px var(--card-border-green);
+        }
+        .project-card:nth-child(odd) .view-project-btn {
+            background-color: var(--neon-green);
+        }
+        
+        .project-card:nth-child(even) {
+            border: 1px solid var(--card-border-red);
+        }
+        .project-card:nth-child(even):hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 15px var(--card-border-red);
+        }
+        .project-card:nth-child(even) .view-project-btn {
+            background-color: var(--neon-red);
+        }
+
+        .view-project-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--primary-black);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            align-self: flex-start; /* Align button to the start of the content box */
+        }
+
+        .view-project-btn:hover {
+            background-color: var(--primary-white);
+            transform: scale(1.05);
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            #projects-page {
+                padding-top: 100px;
+            }
+            .top-nav {
+                top: 20px;
+                right: 0;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .nav-links a {
+                margin: 5px 15px;
+                font-size: 0.9rem;
+            }
+            .page-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Page transition and animation styles */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark-bg);
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .page-transition.active {
+            transform: translateX(0);
+        }
+
+        /* Initial page load animations */
+        .top-nav {
+            opacity: 0;
+            animation: fadeInDown 1s ease 0.3s forwards;
+        }
+
+        .page-title {
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        .projects-grid {
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.9s forwards;
+        }
+
+        /* Card entrance animations */
+        .project-card {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered card animations */
+        .project-card:nth-child(1) { transition-delay: 0.1s; }
+        .project-card:nth-child(2) { transition-delay: 0.2s; }
+        .project-card:nth-child(3) { transition-delay: 0.3s; }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Enhanced hover effects */
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .project-card:nth-child(odd):hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px var(--card-border-green);
+        }
+
+        .project-card:nth-child(even):hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px var(--card-border-red);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Page transition overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+    
+    <video autoplay loop muted playsinline id="video-background">
+        <source src="./projects.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <main id="projects-page">
+        <nav class="top-nav">
+            <div class="nav-links">
+                <a href="./home.html" onclick="smoothNavigate(event, './home.html')">About</a>
+                <a href="./projects.html" onclick="smoothNavigate(event, './projects.html')">Projects</a>
+                <a href="./resume.html" onclick="smoothNavigate(event, './resume.html')">Resume</a>
+                <a href="./research.html" onclick="smoothNavigate(event, './research.html')">Research</a>
+                <a href="./contact.html" onclick="smoothNavigate(event, './contact.html')">Contact</a>
+            </div>
+        </nav>
+
+        <h1 class="page-title">My Projects</h1>
+        
+        <div class="projects-grid">
+            <!-- Project 1: Pehla School -->
+            <div class="project-card">
+                <!-- IMPORTANT: Make sure this image file is in the same folder -->
+                <img src="./pehlaschool.png" alt="Pehla School UI" class="project-image">
+                <div class="card-content">
+                    <h3>Pehla School - Tutoring Platform</h3>
+                    <p>An educational platform designed to connect tutors with students, featuring scheduling and student management tools. Built for the HackMIT hackathon.</p>
+                    <a href="https://github.com/sinhaarya04/hackmit-pehla_school" target="_blank" class="view-project-btn">View on GitHub</a>
+                </div>
+            </div>
+            
+            <!-- Project 2: Nifty-50 Dashboard -->
+            <div class="project-card">
+                 <!-- IMPORTANT: Make sure this image file is in the same folder -->
+                <img src="./nifty.png" alt="Nifty-50 Dashboard" class="project-image">
+                <div class="card-content">
+                    <h3>Nifty-50 Investment Dashboard</h3>
+                    <p>An interactive dashboard for analyzing the performance of an equal-weighted Nifty 50 portfolio, featuring data visualization with Plotly and YFinance API integration.</p>
+                    <a href="https://github.com/Aditya292248/Nifty-50-Investment-Dashboard" target="_blank" class="view-project-btn">View on GitHub</a>
+                </div>
+            </div>
+
+            <!-- Project 3: Brain Tumor Segmentation -->
+            <div class="project-card">
+                 <!-- IMPORTANT: Make sure this image file is in the same folder -->
+                <img src="./brats.png" alt="Brain Tumor Segmentation Model" class="project-image">
+                <div class="card-content">
+                    <h3>Brain Tumor Segmentation (BRATS)</h3>
+                    <p>A deep learning model utilizing the U-Net architecture for semantic segmentation of brain tumors from MRI scans, developed for a Kaggle competition.</p>
+                    <a href="https://www.kaggle.com/code/aditya6704/notebookf355ee2d60" target="_blank" class="view-project-btn">View on Kaggle</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Smooth navigation function
+        function smoothNavigate(event, url) {
+            event.preventDefault();
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        // Page load animation
+        window.addEventListener('load', () => {
+            const transition = document.getElementById('pageTransition');
+            setTimeout(() => {
+                transition.style.transform = 'translateX(100%)';
+            }, 100);
+
+            // Trigger card animations
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.project-card');
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('visible');
+                    }, index * 200);
+                });
+            }, 1200);
+        });
+
+        // Scroll-triggered animations for cards
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all project cards
+        document.querySelectorAll('.project-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 
