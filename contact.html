@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aryan Sinha | Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-green: #00FF41;
+            --primary-dark-bg: #061212; 
+            --primary-white: #FFFFFF;
+            --card-bg: rgba(10, 25, 25, 0.3);
+            --card-border: rgba(0, 255, 65, 0.2);
+        }
+
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark-bg);
+            overflow-x: hidden;
+        }
+
+        /* Fullscreen background video container */
+        #video-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 1;
+            transform: translateX(-50%) translateY(-50%);
+            opacity: 0.15;
+        }
+        
+        /* The main content container */
+        #contact-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 100vh;
+            color: var(--primary-white);
+            padding: 120px 20px 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Top navigation bar */
+        .top-nav {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 10;
+        }
+
+        .nav-links a {
+            color: var(--primary-white);
+            margin-left: 35px;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+        
+        /* Contact Card */
+        .contact-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .contact-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 8px; /* Square frame */
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 2px solid var(--card-border);
+        }
+
+        .contact-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .contact-info a {
+            color: var(--primary-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--neon-green);
+        }
+
+        .social-links {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .social-links a svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--primary-white);
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-links a:hover svg {
+            fill: var(--neon-green);
+            transform: scale(1.1);
+        }
+        
+        .calendly-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--primary-black);
+            background-color: var(--neon-green);
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .calendly-btn:hover {
+            background-color: var(--primary-white);
+            transform: scale(1.05);
+        }
+
+        /* --- Responsiveness --- */
+        @media (max-width: 768px) {
+            #contact-page {
+                padding-top: 100px;
+            }
+            .top-nav {
+                top: 20px;
+                right: 0;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-links a {
+                margin: 5px 15px;
+            }
+        }
+
+        /* Page transition and animation styles */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark-bg);
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .page-transition.active {
+            transform: translateX(0);
+        }
+
+        /* Initial page load animations */
+        .top-nav {
+            opacity: 0;
+            animation: fadeInDown 1s ease 0.3s forwards;
+        }
+
+        .contact-card {
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.6s forwards;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Enhanced hover effects */
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px var(--card-border);
+        }
+
+        .social-links a:hover svg {
+            fill: var(--neon-green);
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .calendly-btn:hover {
+            background-color: var(--primary-white);
+            transform: scale(1.08);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Page transition overlay -->
+    <div class="page-transition" id="pageTransition"></div>
+    
+    <video autoplay loop muted playsinline id="video-background">
+        <source src="./contact.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <main id="contact-page">
+        <nav class="top-nav">
+            <div class="nav-links">
+                <a href="./home.html" onclick="smoothNavigate(event, './home.html')">About</a>
+                <a href="./projects.html" onclick="smoothNavigate(event, './projects.html')">Projects</a>
+                <a href="./resume.html" onclick="smoothNavigate(event, './resume.html')">Resume</a>
+                <a href="./research.html" onclick="smoothNavigate(event, './research.html')">Research</a>
+                <a href="./contact.html" onclick="smoothNavigate(event, './contact.html')">Contact</a>
+            </div>
+        </nav>
+
+        <div class="contact-card">
+            <!-- IMPORTANT: The image source is now updated to aryansinha.png -->
+            <img src="./aryansinha.png" alt="A 3D rendered avatar of Aryan Sinha" class="contact-picture" onerror="this.onerror=null;this.src='https://placehold.co/400x400/000000/ffffff?text=Avatar';">
+            
+            <div class="contact-info">
+                <h2>Get In Touch</h2>
+                <p><a href="mailto:sinha.arya@northeastern.edu">sinha.arya@northeastern.edu</a></p>
+                <p><a href="tel:+18572216160">+1 (857) 221-6160</a></p>
+            </div>
+
+            <div class="social-links">
+                <a href="https://www.instagram.com/aryansinha_04/" target="_blank" title="Instagram">
+                    <!-- Instagram SVG Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.058 1.644-.07 4.85-.07zm0-2.163c-3.272 0-3.662.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.285-.073 1.675-.073 4.947s.014 3.662.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.285.059 1.675.073 4.947.073s3.662-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.285.073-1.675.073-4.947s-.014-3.662-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.285-.059-1.675-.073-4.947-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.441 1.441 1.441 1.441-.645 1.441-1.441-.645-1.44-1.441-1.44z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/in/aryan-sinha-a0b294242/" target="_blank" title="LinkedIn">
+                    <!-- LinkedIn SVG Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://github.com/sinhaarya04" target="_blank" title="GitHub">
+                    <!-- GitHub SVG Icon -->
+                    <svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+            </div>
+            
+            <a href="https://calendly.com/sinha-arya-northeastern/30min" target="_blank" class="calendly-btn">Let's Connect</a>
+        </div>
+    </main>
+
+    <script>
+        // Smooth navigation function
+        function smoothNavigate(event, url) {
+            event.preventDefault();
+            const transition = document.getElementById('pageTransition');
+            transition.classList.add('active');
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 300);
+        }
+
+        // Page load animation
+        window.addEventListener('load', () => {
+            const transition = document.getElementById('pageTransition');
+            setTimeout(() => {
+                transition.style.transform = 'translateX(100%)';
+            }, 100);
+        });
+    </script>
+</body>
+</html> 
