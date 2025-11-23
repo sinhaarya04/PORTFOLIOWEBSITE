@@ -97,6 +97,14 @@
             line-height: 1.6;
             min-height: 4rem; /* Reserve space to prevent layout shift */
         }
+
+        .greeting-text .mini-text {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 10px;
+            font-style: italic;
+        }
         
         /* --- About Me Section (Below the fold) --- */
         #about-section {
@@ -166,6 +174,7 @@
             h1 .typing-cursor { height: 2.1rem; }
             .greeting-text p { font-size: 1.1rem; min-height: 5rem; }
             p .typing-cursor { height: 1.1rem; }
+            .greeting-text .mini-text { font-size: 0.6rem; }
             
             #about-section { padding: 80px 20px; }
         }
@@ -279,6 +288,7 @@
             <div class="greeting-text">
                 <h1 id="heading"></h1>
                 <p id="subheading"></p>
+                <p class="mini-text" id="mini-text"></p>
             </div>
         </section>
 
@@ -297,9 +307,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             const headingEl = document.getElementById('heading');
             const subheadingEl = document.getElementById('subheading');
+            const miniTextEl = document.getElementById('mini-text');
 
-            const headingText = "Aspiring Quantitative Analyst.";
+            const headingText = "Aspiring Quant -";
             const subheadingText = "Leveraging computer science and engineering to build data-driven solutions in finance and AI.";
+            const miniText = "strava streak is greater than github streak";
             
             const headingTypingSpeed = 80; // ms per character
             const subheadingTypingSpeed = 40; // ms per character
@@ -330,7 +342,17 @@
             typeWriter(headingEl, headingText, headingTypingSpeed, () => {
                 // When heading is done, start typing the subheading
                 setTimeout(() => {
-                  typeWriter(subheadingEl, subheadingText, subheadingTypingSpeed);
+                  typeWriter(subheadingEl, subheadingText, subheadingTypingSpeed, () => {
+                      // When subheading is done, show the mini text
+                      setTimeout(() => {
+                          miniTextEl.textContent = miniText;
+                          miniTextEl.style.opacity = '0';
+                          miniTextEl.style.transition = 'opacity 1s ease';
+                          setTimeout(() => {
+                              miniTextEl.style.opacity = '1';
+                          }, 100);
+                      }, 500);
+                  });
                 }, 500); // 500ms delay before starting subheading
             });
 
